@@ -598,7 +598,10 @@ public class Controller {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return members.get(members.size()-1).getMember_id()+1;
+        if (members.size()==0){
+            return 1;
+        }else
+            return members.get(members.size()-1).getMember_id()+1;
     }
     public boolean  updateMember(Member member){
         try {
@@ -839,6 +842,7 @@ public  boolean ReIssueBook(IssueBook issueBook){
             IssueBook issueBook=controller.getIssueBookByMember(this.deletedMember.getMember_id());
             if (issueBook!=null)
                 return false;
+            issueBookDAO.deletIssueBookBymember(this.deletedMember.getMember_id());
             res =memberDAO.deletMember(this.deletedMember.getMember_id());
             if (res==1){
                 VBox members_manager =windows.get("Members Manager");

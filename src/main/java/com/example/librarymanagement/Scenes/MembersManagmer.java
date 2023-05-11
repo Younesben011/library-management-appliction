@@ -178,10 +178,16 @@ public class MembersManagmer extends VBox {
             editContainer.setDisable(true);
             deleteContainer.setDisable(true);
             titLable.setText(memberManagerList[0]);
+            int MemberID_indx = 0;
             for (int i=1;i<member_form.getChildren().size()-2;i++){
                 if(i%2==0){
                     TextField textField= (TextField)member_form.getChildren().get(i);
-                    textField.setText("");}
+                    if (MemberID_indx==0)
+                        textField.setText(String.valueOf(member_id));
+                    else
+                        textField.setText("");
+                    MemberID_indx++;
+                }
             }
             MemberLibraryNum.setText(String.valueOf(controller.getLibrary_number()));
             MemberLibraryNum.setDisable(true);
@@ -325,6 +331,7 @@ public class MembersManagmer extends VBox {
 
         MemberID = new TextField(String.valueOf(controller.NewMemberId()));
         member_id=controller.NewMemberId();
+        MemberID.setText(String.valueOf(member_id));
         MemberID.getStyleClass().add("textInput");
         MemberID.setPromptText(memberManagerList[8]);
         MemberID.setOnKeyReleased(e->{

@@ -231,6 +231,15 @@ public class IssueBookImp implements IssueBookDAO{
         int res =st.executeUpdate();
 
     }
+    @Override
+    public void deletIssueBookBymember(int id) throws SQLException {
+        Connection connection = DatabaseConnection.getConnection();
+        String sql = "DELETE FROM  empreinte where No_Ab=? ";
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setInt(1,id);
+        int res =st.executeUpdate();
+
+    }
 
     @Override
     public boolean ReturnIssueBook(IssueBook issueBook) throws SQLException {

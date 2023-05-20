@@ -8,10 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class LibraryApp extends Stage {
@@ -22,7 +19,6 @@ public class LibraryApp extends Stage {
     VBox MainContainer;
     LibraryApp(Controller controller ,librarian lib){
         setResizable(false);
-
         System.out.println("--------"+controller.getLanguage());
         String Css= LoginPage.class.getResource("style.css").toExternalForm();
         Group root= new Group() ;

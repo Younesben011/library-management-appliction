@@ -22,6 +22,8 @@ import javafx.scene.paint.Paint;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,9 +110,9 @@ public class MembersManagmer extends VBox {
         title.setPrefWidth(300);
         titLable = new Label(memberManagerList[0]);
         if(controller.getLanguage().equals("English"))
-        titLable.setStyle("-fx-font-size: 30;" +
-                "-fx-text-fill: #000000;" +
-                "-fx-font-weight: bold");
+            titLable.setStyle("-fx-font-size: 30;" +
+                    "-fx-text-fill: #000000;" +
+                    "-fx-font-weight: bold");
         else
             titLable.setStyle("-fx-font-size: 20;" +
                     "-fx-text-fill: #000000;" +
@@ -149,8 +151,8 @@ public class MembersManagmer extends VBox {
                         filtered_list.add(member);
 
                 }
-            table.UpdateTable(controller,null,filtered_list,member_form);
-        }});
+                table.UpdateTable(controller,null,filtered_list,member_form);
+            }});
 
 //        search.setLayoutX(0);
         search.setPromptText(memberManagerList[1]);
@@ -206,8 +208,11 @@ public class MembersManagmer extends VBox {
         deleteContainer.setAlignment(Pos.CENTER);
         FileInputStream delS;
         try {
-            delS = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\minus.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/minus.png").toExternalForm());
+            delS = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         Image delimage =new Image(delS);
@@ -229,8 +234,11 @@ public class MembersManagmer extends VBox {
         PinContainer.setAlignment(Pos.CENTER);
         FileInputStream PinF;
         try {
-            PinF = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\pin.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/pin.png").toExternalForm());
+            PinF = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         Image Pinimage =new Image(PinF);
@@ -268,8 +276,8 @@ public class MembersManagmer extends VBox {
             for (int i=1;i<member_form.getChildren().size()-2;i++){
                 if ((i%2==0)){
 
-                TextField textField= (TextField)member_form.getChildren().get(i);
-                textField.setText("");
+                    TextField textField= (TextField)member_form.getChildren().get(i);
+                    textField.setText("");
                 }
             }
 //                controller.d(M.getBookId(), book.getBookAuth(),controller);
@@ -280,8 +288,11 @@ public class MembersManagmer extends VBox {
         editContainer.setAlignment(Pos.CENTER);
         FileInputStream fileInputStream;
         try {
-            fileInputStream = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\pencil.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/pencil.png").toExternalForm());
+            fileInputStream = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         Image image =new Image(fileInputStream);
@@ -390,8 +401,8 @@ public class MembersManagmer extends VBox {
                 if(i%2==0){
                     TextField textField= (TextField)member_form.getChildren().get(i);
                     textField.setText("");}}
-               submit.setText(memberManagerList[16]);
-               reset.setVisible(false);
+            submit.setText(memberManagerList[16]);
+            reset.setVisible(false);
         });
         submit.setOnAction(e->{
             List<Member> members_lsit = null;
@@ -401,40 +412,40 @@ public class MembersManagmer extends VBox {
                 throw new RuntimeException(ex);
             }
             if (submit.getText().equals(memberManagerList[16])){
-            Author author=null;
-            if ((member_id == 0) || member_firstname.isEmpty() || member_lastname.isEmpty() || member_address.isEmpty() || (member_librarynum==0)){
-                message.setText(messageList[2] );
-                message.setTextFill(Paint.valueOf("#FF0000FF"));
-                return;
-            }
-            for (Member member:
-                    members_lsit) {
-                if (member.getMember_id()==member_id){
-                    message.setText(messageList[3]);
-                    MemberID.setBorder(Border.stroke(Paint.valueOf("#FF0000FF")));
+                Author author=null;
+                if ((member_id == 0) || member_firstname.isEmpty() || member_lastname.isEmpty() || member_address.isEmpty() || (member_librarynum==0)){
+                    message.setText(messageList[2] );
                     message.setTextFill(Paint.valueOf("#FF0000FF"));
                     return;
                 }
-            }
+                for (Member member:
+                        members_lsit) {
+                    if (member.getMember_id()==member_id){
+                        message.setText(messageList[3]);
+                        MemberID.setBorder(Border.stroke(Paint.valueOf("#FF0000FF")));
+                        message.setTextFill(Paint.valueOf("#FF0000FF"));
+                        return;
+                    }
+                }
 
                 member_firstname=MemberFirstName.getText();
                 Member  member =new Member(member_id,member_firstname,member_lastname,member_address,member_librarynum);
                 boolean state= controller.AddMember(member);
                 if (state){
                     message.setText( messageList[4]);
-                message.setTextFill(Paint.valueOf("#84EE60FF"));
+                    message.setTextFill(Paint.valueOf("#84EE60FF"));
                     try {
                         table.UpdateTable(controller,null,controller.getAllMembers(),member_form);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
 //                table.addMemberRow(member,controller,member_form);
-            }
-            else {
-                message.setText(messageList[5]);
-                message.setTextFill(Paint.valueOf("#FF0000FF"));
+                }
+                else {
+                    message.setText(messageList[5]);
+                    message.setTextFill(Paint.valueOf("#FF0000FF"));
 
-            }
+                }
             }else
             {
                 member_id = Integer.parseInt(MemberID.getText());

@@ -25,6 +25,8 @@ import javafx.scene.paint.Paint;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ import java.util.TimerTask;
 import java.util.concurrent.*;
 
 public class BookManager extends VBox {
-     Label PinBook;
+    Label PinBook;
     HBox PinContainer;
     Button submit;
     HBox editContainer;
@@ -96,7 +98,7 @@ public class BookManager extends VBox {
             langMessage=messageEnglish;
         }else
             langList=french;
-            langMessage=messageFrench;
+        langMessage=messageFrench;
         getStylesheets().add(Css);
 
         PinToggel=false;
@@ -126,7 +128,7 @@ public class BookManager extends VBox {
         HBox title = new HBox();
         title.setAlignment(Pos.CENTER);
         title.setPrefWidth(300);
-         titLable = new Label(langList[0]);
+        titLable = new Label(langList[0]);
         titLable.setStyle("-fx-font-size: 30;" +
                 "-fx-text-fill: #000000;" +
                 "-fx-font-weight: bold");
@@ -145,7 +147,7 @@ public class BookManager extends VBox {
             System.out.println(search.getText());
             List<Book> filtered_list = new ArrayList<Book>();
             for (Book book:
-                 books_lsit) {
+                    books_lsit) {
                 int count =0;
                 for (int i=0;i<search.getText().length()&&search.getText().length()<=book.getBookName().length();i++){
                     if (search.getText().charAt(i)==book.getBookName().charAt(i)){
@@ -205,22 +207,25 @@ public class BookManager extends VBox {
             container.getChildren().add(AuthorSection);
         });
 
-         DeleteBook = new Label(langList[4]);
+        DeleteBook = new Label(langList[4]);
         DeleteBook.setAlignment(Pos.CENTER);
-         deleteContainer = new HBox(2);
-         deleteContainer.setAlignment(Pos.CENTER);
+        deleteContainer = new HBox(2);
+        deleteContainer.setAlignment(Pos.CENTER);
         FileInputStream delS;
         try {
-            delS = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\minus.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/minus.png").toExternalForm());
+            delS = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         Image delimage =new Image(delS);
         ImageView delimageView =new ImageView(delimage);
         delimageView.setFitWidth(14);
         delimageView.setFitHeight(14);
-         Label del = new Label("_");
-         del.setAlignment(Pos.CENTER);
+        Label del = new Label("_");
+        del.setAlignment(Pos.CENTER);
         del.setStyle("-fx-text-fill: #e01f1f;" +
                 "-fx-font-size: 30px;" +
                 "-fx-font-weight: bold");
@@ -237,14 +242,17 @@ public class BookManager extends VBox {
                 messageOp.setTextFill(Paint.valueOf("#fc3232"));
 
             }});
-        
+
         DeleteBook.getStyleClass().add("AddBook");
-         editContainer = new HBox(2);
+        editContainer = new HBox(2);
         editContainer.setAlignment(Pos.CENTER);
         FileInputStream fileInputStream;
         try {
-            fileInputStream = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\pencil.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/pencil.png").toExternalForm());
+            fileInputStream = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         Image image =new Image(fileInputStream);
@@ -274,8 +282,11 @@ public class BookManager extends VBox {
         PinContainer.setAlignment(Pos.CENTER);
         FileInputStream PinF;
         try {
-            PinF = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\pin.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/pin.png").toExternalForm());
+            PinF = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         Image Pinimage =new Image(PinF);
@@ -353,7 +364,7 @@ public class BookManager extends VBox {
                 message.setText(langMessage[1]);
             }else
                 message.setTextFill(Paint.valueOf("#84EE60FF"));
-                message.setText(langMessage[2]);
+            message.setText(langMessage[2]);
             buttons.getChildren().remove(AddAuth);
 
         });
@@ -380,7 +391,7 @@ public class BookManager extends VBox {
         });
 
         submit = new Button(langList[3]);
-         reset = new Button(langList[19]);
+        reset = new Button(langList[19]);
         reset.setVisible(false);
         reset.setOnAction(e->{
             titLable.setText(langList[0]);
@@ -389,8 +400,8 @@ public class BookManager extends VBox {
                     TextField textField= (TextField)book_form.getChildren().get(i);
                     textField.setText("");}
             }
-                submit.setText(langList[3]);
-                reset.setVisible(false);
+            submit.setText(langList[3]);
+            reset.setVisible(false);
 
         });
         submit.setOnAction(e->{
@@ -402,57 +413,57 @@ public class BookManager extends VBox {
             }
 
             if (submit.getText().equals(langList[3])){
-            Author author=null;
-            if (bok_id.isEmpty()||book_name.isEmpty()||book_auth.isEmpty()||book_quantity.isEmpty()){
-                message.setText(langMessage[3] );
-                message.setTextFill(Paint.valueOf("#FF0000FF"));
-                return;
-            }
-            for (Book book:
-                    books_lsit2) {
-                if (book.getBookId().equals(bok_id)){
-                    message.setText(langMessage[4]);
-                    bokId.setBorder(Border.stroke(Paint.valueOf("#FF0000FF")));
+                Author author=null;
+                if (bok_id.isEmpty()||book_name.isEmpty()||book_auth.isEmpty()||book_quantity.isEmpty()){
+                    message.setText(langMessage[3] );
                     message.setTextFill(Paint.valueOf("#FF0000FF"));
                     return;
                 }
-            }
-            try {
-                author = controller.getAuthor(book_auth);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-            if (!(author ==null)){
-                Book  book =new Book(bok_id,book_name,book_editor,Integer.parseInt(book_quantity));
-                boolean state= controller.AddBook(book,author );
-                if (state)
-                    message.setText(langMessage[5] );
-                    message.setTextFill(Paint.valueOf("#84EE60FF"));
-                for (int i =1;i<book_form.getChildren().size()-2;i++){
-                    if(i%2==0){
-                        TextField textField= (TextField)book_form.getChildren().get(i);
-                        textField.setText("");}
+                for (Book book:
+                        books_lsit2) {
+                    if (book.getBookId().equals(bok_id)){
+                        message.setText(langMessage[4]);
+                        bokId.setBorder(Border.stroke(Paint.valueOf("#FF0000FF")));
+                        message.setTextFill(Paint.valueOf("#FF0000FF"));
+                        return;
+                    }
                 }
-
                 try {
-                    table.UpdateTable(controller,controller.getAllBooks(),book_form);
+                    author = controller.getAuthor(book_auth);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
+                if (!(author ==null)){
+                    Book  book =new Book(bok_id,book_name,book_editor,Integer.parseInt(book_quantity));
+                    boolean state= controller.AddBook(book,author );
+                    if (state)
+                        message.setText(langMessage[5] );
+                    message.setTextFill(Paint.valueOf("#84EE60FF"));
+                    for (int i =1;i<book_form.getChildren().size()-2;i++){
+                        if(i%2==0){
+                            TextField textField= (TextField)book_form.getChildren().get(i);
+                            textField.setText("");}
+                    }
+
+                    try {
+                        table.UpdateTable(controller,controller.getAllBooks(),book_form);
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
 //                table.addBookRow(book,controller,book_form);
-                container.getChildren().remove(AuthorSection);
-                table.setEffect(null);
+                    container.getChildren().remove(AuthorSection);
+                    table.setEffect(null);
 
 
-            }
-            else {
+                }
+                else {
                     message.setText(langMessage[6]);
                     message.setTextFill(Paint.valueOf("#FF0000FF"));
-                buttons.getChildren().add(AddAuth);
+                    buttons.getChildren().add(AddAuth);
 
 
 
-            }}
+                }}
             else {
                 String prev_id = bokId.getText();
                 bok_id=bokId.getText();

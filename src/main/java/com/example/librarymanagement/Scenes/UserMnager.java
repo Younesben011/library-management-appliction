@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class UserMnager extends VBox {
     int id;
@@ -107,14 +109,21 @@ public class UserMnager extends VBox {
         PassCotainer.setPrefWidth(200);
         FileInputStream delS;
         try {
-            delS = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\view.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/view.png").toExternalForm());
+            delS = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         FileInputStream hideS;
         try {
-            hideS = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\hide.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/hide.png").toExternalForm());
+
+            hideS = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         showPass =new Image(delS);
@@ -154,7 +163,7 @@ public class UserMnager extends VBox {
         delimageView.setOnMouseClicked(e->{
 //                Password.setVisible(showPass_toggel);
 //                Password.setManaged(showPass_toggel);
-                delimageView.setImage(showPass_toggel?showPass:HidePass);
+            delimageView.setImage(showPass_toggel?showPass:HidePass);
             showPass_toggel=!showPass_toggel;
             if(showPass_toggel){
                 PassCotainer.getChildren().remove(0);
@@ -242,14 +251,14 @@ public class UserMnager extends VBox {
 
             }else {
 
-            if (id==-1){
-                System.out.println("no user");
-                message.setText("err: No user");
-                message.setTextFill(Color.RED);
+                if (id==-1){
+                    System.out.println("no user");
+                    message.setText("err: No user");
+                    message.setTextFill(Color.RED);
 //                message.setTextFill(Color.GREEN);
-                return;
+                    return;
 
-            }
+                }
                 boolean res = controller.Edituser(this.user,user1,password);
                 if (res){
                     message.setText(messagLag[3]);
@@ -263,7 +272,7 @@ public class UserMnager extends VBox {
 
                 }
 
-            System.out.println(name+" "+last_name+" "+email+" "+password);
+                System.out.println(name+" "+last_name+" "+email+" "+password);
             }
         });
 

@@ -9,6 +9,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class CustomHeader extends HBox {
     public CustomHeader(Controller controller,librarian user){
         String lag= controller.getLanguage();
@@ -36,8 +39,13 @@ public class CustomHeader extends HBox {
         userContainer.setTranslateX(-20);
 
         userContainer.setAlignment(Pos.CENTER);
-
-        Image userImage = new Image("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\user.png");
+        URL delsUrl;
+        try {
+            delsUrl= new URL(LoginPage.class.getResource("/pics/user.png").toExternalForm());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        Image userImage = new Image(delsUrl.getPath());
         ImageView imageView = new ImageView();
         imageView.setImage(userImage);
         imageView.setFitWidth(35);

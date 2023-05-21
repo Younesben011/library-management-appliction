@@ -24,17 +24,20 @@ import javafx.stage.StageStyle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.function.Consumer;
 
 public class LoginPage extends Stage  {
-     boolean showPass_toggel;
+    boolean showPass_toggel;
     TextField PasswordVisible;
     Image showPass;
-     Image HidePass;
+    Image HidePass;
     Pane PassCotainer;
     Consumer<String> func;
-     DropMenu dropMenu;
+    DropMenu dropMenu;
     Label useNameLable;
     Label passwordLable;
     Scene scene;
@@ -45,7 +48,7 @@ public class LoginPage extends Stage  {
     String Passcode="";
     TextField userName;
     PasswordField Password;
-//    TextField Password;
+    //    TextField Password;
     String[] langList=English;
     Label message;
     Controller controller;
@@ -56,29 +59,30 @@ public class LoginPage extends Stage  {
         System.out.println(controller.getLanguage());
         message=new Label("");
         String Css= LoginPage.class.getResource("Login.css").toExternalForm();
+//        System.out.println("sasdad"+IM);
         initStyle(StageStyle.UNDECORATED);
         Group root= new Group() ;
         root.getStylesheets().add(Css);
         scene = new Scene(root,600, 600);
         scene.getStylesheets().add(Css);
-         func = lang->{
-          controller.setLanguage(lang);
-             System.out.println(lang);
-          if (lang.equals("Français")){
-              langList=French;
+        func = lang->{
+            controller.setLanguage(lang);
+            System.out.println(lang);
+            if (lang.equals("Français")){
+                langList=French;
 //            controller.ShowStage("Login");
-          }else {
-              langList=English;
-          }
-          useNameLable.setText(langList[0]);
-          userName.setPromptText(langList[0]);
-          passwordLable.setText(langList[1]);
+            }else {
+                langList=English;
+            }
+            useNameLable.setText(langList[0]);
+            userName.setPromptText(langList[0]);
+            passwordLable.setText(langList[1]);
 //          Password.setPromptText(langList[1]);
-          dropMenu = new DropMenu(new String[]{"English","Français"},controller,func,langList[2]);
-          dropMenu.RenderMenu();
-          root.getChildren().remove(0);
-          root.getChildren().add(0,dropMenu);
-          message.setText("");
+            dropMenu = new DropMenu(new String[]{"English","Français"},controller,func,langList[2]);
+            dropMenu.RenderMenu();
+            root.getChildren().remove(0);
+            root.getChildren().add(0,dropMenu);
+            message.setText("");
 
         };
 
@@ -88,14 +92,24 @@ public class LoginPage extends Stage  {
 //        PassCotainer.setPrefWidth(200);
         FileInputStream delS;
         try {
-            delS = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\view.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/view.png").toExternalForm());
+//            System.out.println(delsUrl.getPath());
+            delS = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         FileInputStream hideS;
         try {
-            hideS = new FileInputStream("G:\\coding\\java\\LibraryManagement\\src\\main\\resources\\pics\\hide.png");
+            URL delsUrl= new URL(LoginPage.class.getResource("/pics/view.png").toExternalForm());
+//            System.out.println(delsUrl.getPath());
+            hideS = new FileInputStream(delsUrl.getPath());
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
         showPass =new Image(delS);
@@ -129,7 +143,7 @@ public class LoginPage extends Stage  {
                 new Stop(0,Color.web("#073596")),
                 new Stop(1,Color.web("#34b6f0")),
                 new Stop(2,Color.web("#34b6f0"))
-                ));
+        ));
 //        login form////////////////////////////////////////
         Label WellcomeTitel = new Label("");
         VBox loginForm = new VBox(40);
@@ -283,9 +297,9 @@ public class LoginPage extends Stage  {
                 String french = "S'il vous plaît complétez le formulaire";
                 if(controller.getLanguage().equals("English")){
 
-                message.setText(english);
+                    message.setText(english);
                 }else
-                message.setText(french);
+                    message.setText(french);
                 message.setTextFill(Color.RED);
                 message.setTextAlignment(TextAlignment.CENTER);
             }
